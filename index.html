@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Notas - VC Nota</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📊 Calculadora de Notas</h1>
+            <p>Calcula la nota que necesitas en el examen final para aprobar</p>
+        </header>
+
+        <main class="main-content">
+            <div class="calculator-layout">
+                <!-- Columna izquierda - Notas parciales -->
+                <div class="parciales-section">
+                    <div class="section-header">
+                        <h2>📝 Notas Parciales (60%)</h2>
+                        <button id="agregarNotaBtn" class="agregar-btn">+ Agregar Nota</button>
+                    </div>
+                    
+                    <div class="notas-container" id="notasContainer">
+                        <!-- Las notas se generarán dinámicamente -->
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-item">
+                            <label>Distribución de pesos:</label>
+                            <div class="pesos-info">
+                                <span>Parciales: <strong>60%</strong></span>
+                                <span>Final: <strong>40%</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha - Examen final -->
+                <div class="examen-section">
+                    <div class="examen-card">
+                        <h2>🎯 Examen Final (40%)</h2>
+                        
+                        <div class="nota-necesaria" id="notaNecesariaContainer">
+                            <div class="nota-grande" id="notaNecesaria">0</div>
+                            <div class="nota-label">Nota necesaria</div>
+                        </div>
+
+                        <div class="result-status" id="resultStatus">
+                            <span class="status-text" id="statusText">Ingresa tus notas para calcular</span>
+                        </div>
+
+                        <div class="objetivo-section">
+                            <div class="objetivo-row">
+                                <div class="config-item">
+                                    <label for="notaObjetivo">Nota objetivo final:</label>
+                                    <input type="number" id="notaObjetivo" min="1.0" max="7.0" step="0.1" value="4.0" class="objetivo-input">
+                                </div>
+                                <div class="config-item">
+                                    <label>Examen final:</label>
+                                    <div class="examen-info">
+                                        <strong>40%</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de recomendaciones -->
+            <div class="recomendaciones-section">
+                <h2>💡 Recomendaciones</h2>
+                <div class="recomendaciones-grid">
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">📚</div>
+                        <h3>Estudia más</h3>
+                        <p>Dedica más tiempo a repasar los temas que te cuestan más trabajo. La práctica constante es clave.</p>
+                    </div>
+                    
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">⏰</div>
+                        <h3>Organiza tu tiempo</h3>
+                        <p>Planifica sesiones de estudio regulares. Es mejor estudiar poco cada día que mucho de una vez.</p>
+                    </div>
+                    
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">🎯</div>
+                        <h3>Enfócate en lo importante</h3>
+                        <p>Identifica los temas que más peso tienen en la evaluación y concéntrate en dominarlos.</p>
+                    </div>
+                    
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">🤝</div>
+                        <h3>Forma grupos de estudio</h3>
+                        <p>Estudiar con compañeros puede ayudarte a entender mejor los conceptos difíciles.</p>
+                    </div>
+                    
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">📝</div>
+                        <h3>Haz resúmenes</h3>
+                        <p>Escribir tus propios resúmenes te ayuda a procesar y recordar mejor la información.</p>
+                    </div>
+                    
+                    <div class="recomendacion-card">
+                        <div class="recomendacion-icon">🧠</div>
+                        <h3>Descansa bien</h3>
+                        <p>Un buen descanso es fundamental para que tu cerebro procese y retenga la información.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Desarrollado con ❤️ para estudiantes</p>
+                <p class="footer-motto">¡El éxito académico está en tus manos!</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
