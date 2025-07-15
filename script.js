@@ -1,26 +1,69 @@
-// Variables globales
-let notaCounter = 0;
-let notas = [];
+/**
+ * Calculadora de Notas - VC Nota
+ * 
+ * Esta aplicación calcula la nota necesaria en el examen final para aprobar,
+ * basándose en las notas parciales y sus pesos respectivos.
+ * 
+ * Lógica de cálculo:
+ * - Nota final = (Promedio ponderado de parciales × 0.6) + (Nota examen × 0.4)
+ * - Nota necesaria en examen = (Nota objetivo - (Promedio parcial × 0.6)) / 0.4
+ * 
+ * @author CEOAlmaloco
+ * @version 1.0.0
+ */
 
-// Funciones principales de cálculo (traducidas del Python)
+// Variables globales
+let notaCounter = 0; // Contador para generar IDs únicos de notas
+let notas = []; // Array que almacena las referencias a las notas
+
+/**
+ * Calcula el promedio ponderado de las notas parciales
+ * @param {Array} notas - Array de notas numéricas
+ * @param {Array} pesos - Array de pesos decimales (deben sumar 1)
+ * @returns {number} Promedio ponderado
+ */
 function calcularPromedioParcial(notas, pesos) {
+    console.log('🔢 Calculando promedio parcial:', { notas, pesos });
     let promedio = 0;
     for (let i = 0; i < notas.length; i++) {
         promedio += notas[i] * pesos[i];
     }
+    console.log('📊 Promedio parcial calculado:', promedio);
     return promedio;
 }
 
+/**
+ * Calcula la nota necesaria en el examen final para alcanzar la nota objetivo
+ * @param {number} notaObjetivo - Nota final que se quiere alcanzar
+ * @param {number} parcial - Promedio ponderado de las notas parciales
+ * @param {number} pesoParcial - Peso de las parciales en la nota final (0.6)
+ * @param {number} pesoExamen - Peso del examen en la nota final (0.4)
+ * @returns {number} Nota necesaria en el examen
+ */
 function calcularNotaExamenObjetivo(notaObjetivo, parcial, pesoParcial = 0.6, pesoExamen = 0.4) {
+    console.log('🎯 Calculando nota necesaria en examen:', {
+        notaObjetivo,
+        parcial,
+        pesoParcial,
+        pesoExamen
+    });
+    
     const notaExamen = (notaObjetivo - (parcial * pesoParcial)) / pesoExamen;
+    console.log('📈 Nota necesaria en examen calculada:', notaExamen);
     return notaExamen;
 }
 
-// Función para crear una nueva nota
+/**
+ * Crea un nuevo elemento de nota en la interfaz
+ * @param {Object} notaData - Datos opcionales de la nota (nota, peso)
+ * @returns {Object} Objeto con el elemento DOM y metadatos
+ */
 function crearNotaItem(notaData = null) {
     notaCounter++;
     const notaId = `nota${notaCounter}`;
     const pesoId = `peso${notaCounter}`;
+    
+    console.log('➕ Creando nueva nota:', { notaId, pesoId, notaData });
     
     const notaItem = document.createElement('div');
     notaItem.className = 'nota-item';
@@ -32,7 +75,7 @@ function crearNotaItem(notaData = null) {
     notaItem.innerHTML = `
         <div class="nota-header">
             <div class="nota-title">Nota ${notaCounter}</div>
-            <button class="eliminar-btn" onclick="eliminarNota(${notaCounter})" title="Eliminar nota"></button>
+            <button class="eliminar-btn" onclick="eliminarNota(${notaCounter})" title="Eliminar nota">🗑️</button>
         </div>
         <div class="nota-content">
             <input type="text" 
@@ -65,16 +108,25 @@ function crearNotaItem(notaData = null) {
     };
 }
 
-// Función para limpiar el input cuando se enfoca
+/**
+ * Limpia el input cuando se enfoca (quita el 0 inicial)
+ * @param {HTMLInputElement} input - Elemento input a limpiar
+ */
 function limpiarInput(input) {
+    console.log('🧹 Limpiando input:', input.value);
     if (input.value === '0' || input.value === '0.0') {
         input.value = '';
     }
 }
 
-// Función para validar y procesar el input de nota
+/**
+ * Valida y procesa el input de nota en tiempo real
+ * @param {HTMLInputElement} input - Elemento input a validar
+ * @param {number} notaIndex - Índice de la nota
+ */
 function validarNotaInput(input, notaIndex) {
     let valor = input.value;
+    console.log(`📝 Validando nota ${notaIndex}:`, valor);
 
     // Reemplazar coma por punto
     valor = valor.replace(',', '.');
@@ -85,6 +137,7 @@ function validarNotaInput(input, notaIndex) {
     // Si el usuario escribe dos dígitos sin punto, lo interpreta como decimal (ej: 50 => 5.0)
     if (/^\d{2}$/.test(valor)) {
         valor = valor[0] + '.' + valor[1];
+        console.log(`🔄 Convirtiendo ${valor} a formato decimal`);
     }
 
     // Asegurar que solo haya un punto decimal
@@ -105,36 +158,50 @@ function validarNotaInput(input, notaIndex) {
     const numero = parseFloat(valor);
     if (numero > 7.0) {
         valor = '7.0';
+        console.log('⚠️ Nota limitada a 7.0');
     }
 
     input.value = valor;
 
     // Calcular automáticamente si hay un valor válido
     if (valor && !isNaN(numero)) {
+        console.log(`✅ Nota ${notaIndex} válida:`, valor);
         calcular();
     }
 }
 
-// Función para formatear la nota cuando pierde el foco
+/**
+ * Formatea la nota cuando pierde el foco (agrega .0 si es entero)
+ * @param {HTMLInputElement} input - Elemento input a formatear
+ */
 function formatearNota(input) {
     const valor = parseFloat(input.value);
+    console.log('🎨 Formateando nota:', input.value, '→', valor);
+    
     if (isNaN(valor) || valor === 0) {
         input.value = '';
+        console.log('🗑️ Input vacío');
     } else {
         // Solo formatear si el valor es mayor a 7.0 o si el usuario no ha terminado de escribir
         if (valor > 7.0) {
             input.value = '7.0';
+            console.log('📏 Nota limitada a 7.0');
         } else if (input.value.includes('.')) {
             // Si ya tiene punto decimal, mantener el formato original
             input.value = valor.toFixed(1);
+            console.log('🔧 Formato decimal mantenido:', input.value);
         } else {
-            // Si es un número entero, mantenerlo como está
-            input.value = valor.toString();
+            // Si es un número entero, agregar .0 automáticamente
+            input.value = valor.toFixed(1);
+            console.log('✨ Entero convertido a decimal:', input.value);
         }
     }
 }
 
-// Función para actualizar el peso de una nota específica
+/**
+ * Actualiza el peso de una nota específica y recalcula
+ * @param {number} notaIndex - Índice de la nota
+ */
 function actualizarPesoNota(notaIndex) {
     const pesoSlider = document.getElementById(`peso${notaIndex}`);
     const pesoValue = document.getElementById(`peso-value-${notaIndex}`);
@@ -142,20 +209,28 @@ function actualizarPesoNota(notaIndex) {
     if (pesoSlider && pesoValue) {
         const peso = parseInt(pesoSlider.value);
         pesoValue.textContent = peso;
+        console.log(`⚖️ Peso de nota ${notaIndex} actualizado:`, peso + '%');
         
         // Calcular automáticamente
         calcular();
     }
 }
 
-// Función para actualizar la barra de progreso de una nota específica (mantenida por compatibilidad)
+/**
+ * Función para actualizar la barra de progreso (mantenida por compatibilidad)
+ * @param {number} notaIndex - Índice de la nota
+ */
 function actualizarNotaProgress(notaIndex) {
     // Esta función se mantiene por compatibilidad pero ya no hace nada
     // ya que quitamos las barras de progreso
+    console.log('📊 Función de progreso deshabilitada para nota:', notaIndex);
 }
 
-// Función para agregar una nueva nota
+/**
+ * Agrega una nueva nota a la interfaz
+ */
 function agregarNota() {
+    console.log('➕ Agregando nueva nota');
     const notasContainer = document.getElementById('notasContainer');
     const nuevaNota = crearNotaItem();
     
@@ -174,33 +249,41 @@ function agregarNota() {
     
     // Enfocar el nuevo input
     document.getElementById(nuevaNota.id).focus();
+    console.log('✅ Nueva nota agregada exitosamente');
 }
 
-// Función para verificar si necesitamos agregar scroll
+/**
+ * Verifica si necesitamos agregar scroll interno al contenedor de notas
+ */
 function verificarScroll() {
     const notasContainer = document.getElementById('notasContainer');
     const notaItems = document.querySelectorAll('.nota-item');
     
     if (notaItems.length > 5) {
         notasContainer.classList.add('has-scroll');
+        console.log('📜 Scroll habilitado (más de 5 notas)');
     } else {
         notasContainer.classList.remove('has-scroll');
+        console.log('📜 Scroll deshabilitado (5 o menos notas)');
     }
 }
 
-// Función para eliminar una nota
+/**
+ * Elimina una nota específica y redistribuye los pesos
+ * @param {number} notaIndex - Índice de la nota a eliminar
+ */
 function eliminarNota(notaIndex) {
-    console.log('DEBUG - Eliminando nota:', notaIndex);
+    console.log('🗑️ Eliminando nota:', notaIndex);
     
     const notaItem = document.getElementById(`nota-item-${notaIndex}`);
     if (notaItem) {
-        console.log('DEBUG - Elemento encontrado, eliminando del DOM');
+        console.log('✅ Elemento encontrado, eliminando del DOM');
         notaItem.remove();
 
         // Remover de la lista de notas
         const notasAntes = notas.length;
         notas = notas.filter(n => n.id !== `nota${notaIndex}`);
-        console.log(`DEBUG - Notas en array: ${notasAntes} → ${notas.length}`);
+        console.log(`📊 Notas en array: ${notasAntes} → ${notas.length}`);
 
         // Renumerar las notas restantes
         renumerarNotas();
@@ -211,21 +294,27 @@ function eliminarNota(notaIndex) {
         // Verificar scroll
         verificarScroll();
     } else {
-        console.log('DEBUG - Elemento no encontrado');
+        console.log('❌ Elemento no encontrado');
     }
 }
 
-// Nueva función para redistribuir pesos automáticamente
+/**
+ * Redistribuye automáticamente los pesos de las notas restantes
+ */
 function redistribuirPesosNotas() {
+    console.log('⚖️ Redistribuyendo pesos automáticamente');
     const pesoSliders = document.querySelectorAll('.peso-slider');
     const pesoValues = document.querySelectorAll('.nota-peso-section span');
     const cantidad = pesoSliders.length;
+    
     if (cantidad === 0) return;
+    
     // Distribuir en múltiplos de 5 para mantener el step
     let pesoBase = Math.floor(100 / cantidad / 5) * 5;
     let pesos = Array(cantidad).fill(pesoBase);
     let suma = pesoBase * cantidad;
     let i = 0;
+    
     // Ajustar los pesos para que sumen exactamente 100
     while (suma < 100) {
         pesos[i % cantidad] += 5;
@@ -237,17 +326,24 @@ function redistribuirPesosNotas() {
         suma -= 5;
         i++;
     }
+    
     // Asignar los nuevos valores a los sliders y spans
     pesoSliders.forEach((slider, idx) => {
         slider.value = pesos[idx];
         pesoValues[idx].textContent = pesos[idx];
     });
+    
+    console.log('✅ Pesos redistribuidos:', pesos);
+    
     // Calcular automáticamente
     calcular();
 }
 
-// Función para renumerar las notas después de eliminar
+/**
+ * Renumera las notas después de eliminar una
+ */
 function renumerarNotas() {
+    console.log('🔄 Renumerando notas');
     const notaItems = document.querySelectorAll('.nota-item');
     notaItems.forEach((item, index) => {
         const notaTitle = item.querySelector('.nota-title');
@@ -284,9 +380,13 @@ function renumerarNotas() {
             notas[notaIndex].pesoId = newPesoId;
         }
     });
+    console.log('✅ Notas renumeradas exitosamente');
 }
 
-// Función para obtener los valores de los inputs
+/**
+ * Obtiene los valores de todos los inputs y los valida
+ * @returns {Object} Objeto con notas, pesos, nota objetivo y configuración
+ */
 function obtenerValores() {
     const notasValores = [];
     const pesosValores = [];
@@ -295,7 +395,7 @@ function obtenerValores() {
     const notaInputs = document.querySelectorAll('.nota-input');
     const pesoSliders = document.querySelectorAll('.peso-slider');
     
-    console.log('DEBUG - obtenerValores:');
+    console.log('📊 Obteniendo valores:');
     console.log('  Cantidad de notaInputs encontrados:', notaInputs.length);
     console.log('  Cantidad de pesoSliders encontrados:', pesoSliders.length);
     
@@ -356,13 +456,18 @@ function obtenerValores() {
     };
 }
 
-// Función para mostrar resultados
+/**
+ * Muestra los resultados del cálculo en la interfaz
+ * @param {number} notaExamen - Nota necesaria en el examen
+ * @param {number} promedioParcial - Promedio ponderado de las parciales
+ * @param {number} notaObjetivo - Nota objetivo final
+ */
 function mostrarResultados(notaExamen, promedioParcial, notaObjetivo) {
     const notaNecesariaElement = document.getElementById('notaNecesaria');
     const statusElement = document.getElementById('resultStatus');
     const statusTextElement = document.getElementById('statusText');
     
-    console.log('DEBUG - mostrarResultados recibió:');
+    console.log('📊 Mostrando resultados:');
     console.log('  notaExamen:', notaExamen);
     console.log('  promedioParcial:', promedioParcial);
     console.log('  notaObjetivo:', notaObjetivo);
@@ -388,7 +493,7 @@ function mostrarResultados(notaExamen, promedioParcial, notaObjetivo) {
         notaNecesariaElement.style.color = '#667eea';
     }
     
-    console.log('DEBUG - notaAMostrar final:', notaAMostrar);
+    console.log('  notaAMostrar final:', notaAMostrar);
     
     // Mostrar nota necesaria grande
     notaNecesariaElement.textContent = notaAMostrar.toFixed(2);
@@ -398,8 +503,11 @@ function mostrarResultados(notaExamen, promedioParcial, notaObjetivo) {
     statusTextElement.textContent = statusMessage;
 }
 
-// Función principal de cálculo
+/**
+ * Función principal de cálculo que coordina todo el proceso
+ */
 function calcular() {
+    console.log('🧮 Iniciando cálculo principal');
     try {
         // Obtener valores
         const valores = obtenerValores();
@@ -415,17 +523,18 @@ function calcular() {
             valores.pesoExamen
         );
         
-        console.log('DEBUG - Notas:', valores.notas);
-        console.log('DEBUG - Pesos:', valores.pesos);
-        console.log('DEBUG - Promedio parcial:', promedioParcial);
-        console.log('DEBUG - Nota examen calculada:', notaExamen);
-        console.log('DEBUG - Nota objetivo:', valores.notaObjetivo);
+        console.log('📈 Resultados del cálculo:');
+        console.log('  Notas:', valores.notas);
+        console.log('  Pesos:', valores.pesos);
+        console.log('  Promedio parcial:', promedioParcial);
+        console.log('  Nota examen calculada:', notaExamen);
+        console.log('  Nota objetivo:', valores.notaObjetivo);
         
         // Mostrar resultados
         mostrarResultados(notaExamen, promedioParcial, valores.notaObjetivo);
         
     } catch (error) {
-        console.error('ERROR:', error);
+        console.error('❌ Error en el cálculo:', error);
         // Mostrar error en la interfaz en lugar de alert
         const statusElement = document.getElementById('resultStatus');
         const statusTextElement = document.getElementById('statusText');
@@ -438,7 +547,10 @@ function calcular() {
     }
 }
 
-// Función para validar inputs en tiempo real
+/**
+ * Valida inputs en tiempo real
+ * @param {HTMLInputElement} input - Elemento input a validar
+ */
 function validarInput(input) {
     const valor = parseFloat(input.value);
     const min = parseFloat(input.min);
@@ -446,13 +558,19 @@ function validarInput(input) {
     
     if (valor < min || valor > max) {
         input.style.borderColor = '#f56565';
+        console.log('❌ Input inválido:', valor);
     } else {
         input.style.borderColor = '#48bb78';
+        console.log('✅ Input válido:', valor);
     }
 }
 
-// Función para limpiar formulario
+/**
+ * Limpia completamente el formulario y restaura valores por defecto
+ */
 function limpiarFormulario() {
+    console.log('🧹 Limpiando formulario completo');
+    
     // Limpiar notas
     const notasContainer = document.getElementById('notasContainer');
     notasContainer.innerHTML = '';
@@ -471,10 +589,15 @@ function limpiarFormulario() {
     for (let i = 0; i < 4; i++) {
         agregarNota();
     }
+    
+    console.log('✅ Formulario limpiado exitosamente');
 }
 
-// Función para exportar resultados
+/**
+ * Exporta los resultados a un archivo de texto
+ */
 function exportarResultados() {
+    console.log('📤 Exportando resultados');
     const notaNecesaria = document.getElementById('notaNecesaria').textContent;
     const statusText = document.getElementById('statusText').textContent;
     
@@ -511,10 +634,59 @@ Fecha: ${new Date().toLocaleString('es-ES')}
     a.download = 'resultados_calculadora_notas.txt';
     a.click();
     URL.revokeObjectURL(url);
+    
+    console.log('✅ Resultados exportados exitosamente');
+}
+
+/**
+ * Muestra recomendaciones específicas al hacer click en "Estudia más"
+ */
+function mostrarRecomendacionesEstudio() {
+    const recomendaciones = [
+        {
+            titulo: "📚 Técnicas de Estudio Efectivas",
+            consejos: [
+                "Usa el método Pomodoro: 25 min de estudio + 5 min de descanso",
+                "Crea mapas mentales para conectar conceptos",
+                "Practica con ejercicios similares a los del examen",
+                "Enseña lo que aprendiste a alguien más (método Feynman)"
+            ]
+        },
+        {
+            titulo: "⏰ Organización del Tiempo",
+            consejos: [
+                "Planifica sesiones de 2-3 horas máximo por día",
+                "Estudia en el mismo horario todos los días",
+                "Prioriza los temas que más peso tienen en la evaluación",
+                "Deja tiempo para repaso la noche anterior al examen"
+            ]
+        },
+        {
+            titulo: "🎯 Enfoque en Temas Clave",
+            consejos: [
+                "Identifica los conceptos fundamentales del curso",
+                "Revisa los apuntes de las clases más importantes",
+                "Practica con exámenes anteriores si están disponibles",
+                "Concentra el 80% del tiempo en el 20% de temas más importantes"
+            ]
+        }
+    ];
+    
+    const recomendacionAleatoria = recomendaciones[Math.floor(Math.random() * recomendaciones.length)];
+    
+    let mensaje = `🎓 ${recomendacionAleatoria.titulo}\n\n`;
+    recomendacionAleatoria.consejos.forEach(consejo => {
+        mensaje += `• ${consejo}\n`;
+    });
+    
+    alert(mensaje);
+    console.log('💡 Mostrando recomendaciones de estudio:', recomendacionAleatoria.titulo);
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando Calculadora de Notas');
+    
     // Botón agregar nota
     const agregarNotaBtn = document.getElementById('agregarNotaBtn');
     agregarNotaBtn.addEventListener('click', agregarNota);
@@ -586,4 +758,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Insertar botones después de la sección de configuración
     const configSection = document.querySelector('.config-section');
     configSection.appendChild(buttonContainer);
+    
+    // Agregar funcionalidad a las recomendaciones
+    const recomendacionCards = document.querySelectorAll('.recomendacion-card');
+    recomendacionCards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+            const titulo = this.querySelector('h3').textContent;
+            if (titulo === 'Estudia más') {
+                mostrarRecomendacionesEstudio();
+            } else {
+                console.log('💡 Click en recomendación:', titulo);
+                // Aquí puedes agregar más funcionalidades para otras recomendaciones
+            }
+        });
+    });
+    
+    console.log('✅ Calculadora de Notas inicializada exitosamente');
 }); 

@@ -1,113 +1,153 @@
 # 📊 Calculadora de Notas - VC Nota
 
-Una calculadora web moderna y fácil de usar para determinar la nota que necesitas en el examen final para aprobar una asignatura.
+Una aplicación web moderna y intuitiva para calcular la nota necesaria en el examen final para aprobar, basándose en las notas parciales y sus pesos respectivos.
 
-## ✨ Características
+## 🎯 Características
 
-- **Interfaz moderna y responsiva**: Diseño atractivo que funciona en cualquier dispositivo
-- **Cálculos precisos**: Implementa la misma lógica que tu código Python original
-- **Validación en tiempo real**: Verifica que los datos ingresados sean válidos
-- **Visualización de progreso**: Barra de progreso que muestra qué tan cerca estás del objetivo
-- **Exportación de resultados**: Guarda tus resultados en un archivo de texto
-- **Configuración flexible**: Personaliza pesos y nota objetivo según tu universidad
+- **Cálculo automático**: Obtén resultados en tiempo real mientras ingresas tus notas
+- **Notas dinámicas**: Agrega o elimina notas parciales según necesites
+- **Pesos ajustables**: Distribuye los pesos de las notas con sliders intuitivos
+- **Interfaz moderna**: Diseño responsivo y amigable
+- **Recomendaciones interactivas**: Consejos de estudio al hacer click
+- **Exportación de resultados**: Descarga tus cálculos en formato de texto
+- **Formateo automático**: Los números enteros se convierten automáticamente a decimales (ej: 7 → 7.0)
 
-## 🚀 Cómo usar
+## 🧮 Lógica de Cálculo
 
-1. **Abre el archivo `index.html`** en tu navegador web
-2. **Ingresa tus notas parciales** (valores entre 1.0 y 7.0)
-3. **Configura los pesos** de cada nota (deben sumar 100%)
-4. **Establece la nota objetivo** que quieres alcanzar
-5. **Ajusta los pesos** de parciales vs examen final
-6. **Haz clic en "Calcular"** para ver los resultados
+La aplicación utiliza la siguiente fórmula matemática:
 
-## 📋 Ejemplo de uso
-
-Con las notas por defecto:
-- Nota 1: 7.0 (peso: 10%)
-- Nota 2: 4.9 (peso: 25%)
-- Nota 3: 5.7 (peso: 30%)
-- Nota 4: 2.0 (peso: 35%)
-- Nota objetivo: 4.0
-- Peso parciales: 60%
-- Peso examen: 40%
-
-**Resultado**: Necesitas aproximadamente 3.85 en el examen final para aprobar.
-
-## 🔧 Funciones incluidas
-
-### Funciones principales (traducidas del Python original):
-
-```javascript
-// Calcula el promedio ponderado de las notas parciales
-function calcularPromedioParcial(notas, pesos)
-
-// Calcula la nota necesaria en el examen para alcanzar el objetivo
-function calcularNotaExamenObjetivo(notaObjetivo, parcial, pesoParcial, pesoExamen)
+```
+Nota final = (Promedio ponderado de parciales × 0.6) + (Nota examen × 0.4)
 ```
 
-### Funciones adicionales:
+Para calcular la nota necesaria en el examen:
 
-- **Validación automática**: Verifica que los pesos sumen 100%
-- **Actualización en tiempo real**: Los pesos se ajustan automáticamente
-- **Exportación**: Guarda resultados en archivo de texto
-- **Limpieza**: Restaura valores por defecto
+```
+Nota necesaria en examen = (Nota objetivo - (Promedio parcial × 0.6)) / 0.4
+```
 
-## 🎨 Características del diseño
+### Ejemplo de cálculo:
 
-- **Gradientes modernos**: Fondo con degradado atractivo
-- **Animaciones suaves**: Transiciones y efectos hover
-- **Responsive design**: Se adapta a móviles y tablets
-- **Validación visual**: Los campos cambian de color según su validez
-- **Estados de resultado**: Diferentes colores según la viabilidad
+Si tienes:
+- Nota 1: 4.9 (peso 35%)
+- Nota 2: 5.7 (peso 30%)
+- Nota 3: 7.0 (peso 35%)
+- Nota objetivo: 4.0
+
+**Cálculo:**
+1. Promedio parcial = (4.9 × 0.35) + (5.7 × 0.30) + (7.0 × 0.35) = 5.875
+2. Aporte parcial = 5.875 × 0.6 = 3.525
+3. Nota necesaria = (4.0 - 3.525) / 0.4 = 1.19
+
+**Resultado:** Necesitas 1.19 en el examen para aprobar con 4.0
+
+## 🚀 Instalación y Uso
+
+### Requisitos
+- Navegador web moderno (Chrome, Firefox, Safari, Edge)
+- No requiere instalación de software adicional
+
+### Pasos para usar
+1. Abre `index.html` en tu navegador
+2. Ingresa tus notas parciales en los campos correspondientes
+3. Ajusta los pesos de cada nota usando los sliders
+4. Establece tu nota objetivo final
+5. La nota necesaria en el examen se calculará automáticamente
+
+## 📁 Estructura del Proyecto
+
+```
+calculadora-notas/
+├── index.html          # Página principal
+├── styles.css          # Estilos CSS
+├── script.js           # Lógica JavaScript
+└── README.md           # Documentación
+```
+
+## 🛠️ Tecnologías Utilizadas
+
+- **HTML5**: Estructura semántica
+- **CSS3**: Estilos modernos con gradientes y animaciones
+- **JavaScript ES6+**: Lógica de cálculo y interactividad
+- **Font Awesome**: Iconos y emojis
+- **Google Fonts**: Tipografía Inter
+
+## 🎨 Características de la Interfaz
+
+### Diseño Responsivo
+- Se adapta a diferentes tamaños de pantalla
+- Layout de dos columnas en desktop
+- Diseño de una columna en móviles
+
+### Elementos Interactivos
+- **Sliders de peso**: Ajusta los pesos de las notas con controles deslizantes
+- **Botones de acción**: Agregar, eliminar, limpiar y exportar
+- **Validación en tiempo real**: Los inputs se validan automáticamente
+- **Recomendaciones clickeables**: Haz click en las tarjetas para obtener consejos específicos
+
+### Estados Visuales
+- **Éxito**: Verde cuando ya estás aprobado
+- **Advertencia**: Rojo cuando es imposible alcanzar la nota
+- **Información**: Azul cuando es posible alcanzar la nota objetivo
+
+## 🔧 Funcionalidades Avanzadas
+
+### Formateo Automático
+- Los números enteros se convierten automáticamente a decimales
+- Ejemplo: escribir "7" se convierte en "7.0"
+- Acepta tanto comas como puntos como separadores decimales
+
+### Redistribución de Pesos
+- Al eliminar una nota, los pesos se redistribuyen automáticamente
+- Los pesos siempre suman 100% entre las notas parciales
+- Los sliders se ajustan en múltiplos de 5 para facilitar el uso
+
+### Recomendaciones Inteligentes
+- Click en "Estudia más" para obtener técnicas específicas
+- Consejos aleatorios cada vez que haces click
+- Métodos probados como Pomodoro, Feynman, etc.
 
 ## 📱 Compatibilidad
 
-- ✅ Chrome (recomendado)
-- ✅ Firefox
-- ✅ Safari
-- ✅ Edge
-- ✅ Móviles y tablets
+- ✅ Chrome 60+
+- ✅ Firefox 55+
+- ✅ Safari 12+
+- ✅ Edge 79+
+- ✅ Móviles (iOS Safari, Chrome Mobile)
 
-## 🛠️ Tecnologías utilizadas
+## 🤝 Contribuciones
 
-- **HTML5**: Estructura semántica
-- **CSS3**: Estilos modernos con Flexbox y Grid
-- **JavaScript ES6+**: Lógica de cálculo y interactividad
-- **Google Fonts**: Tipografía Inter
+Las contribuciones son bienvenidas. Para contribuir:
 
-## 📁 Estructura de archivos
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-```
-VC_Nota/
-├── index.html      # Página principal
-├── styles.css      # Estilos y diseño
-├── script.js       # Lógica de cálculo
-└── README.md       # Este archivo
-```
+## 📄 Licencia
 
-## 🎯 Estados de resultado
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-- **🟢 Verde**: Ya estás aprobado, no necesitas nada en el examen
-- **🔵 Azul**: Es posible alcanzar la nota objetivo
-- **🔴 Rojo**: Es imposible, necesitarías más de 7.0
+## 👨‍💻 Autor
 
-## 💡 Consejos de uso
+**CEOAlmaloco**
+- GitHub: [@CEOAlmaloco](https://github.com/CEOAlmaloco)
 
-1. **Verifica los pesos**: Asegúrate de que sumen exactamente 100%
-2. **Usa valores reales**: Ingresa las notas que realmente obtuviste
-3. **Ajusta la configuración**: Los pesos pueden variar según tu universidad
-4. **Exporta los resultados**: Guarda tus cálculos para referencia futura
+## 🙏 Agradecimientos
 
-## 🔄 Actualizaciones futuras
+- Inspirado en la necesidad de los estudiantes de calcular notas de manera eficiente
+- Diseño inspirado en las mejores prácticas de UX/UI modernas
+- Lógica matemática basada en sistemas de evaluación académica chilenos
 
-- [ ] Soporte para más de 4 notas parciales
-- [ ] Historial de cálculos
-- [ ] Modo oscuro
-- [ ] Calculadora de GPA
-- [ ] Integración con sistemas universitarios
+## 📞 Soporte
+
+Si tienes alguna pregunta o encuentras un bug, por favor:
+
+1. Revisa la consola del navegador (F12) para ver logs de debugging
+2. Abre un issue en GitHub
+3. Contacta al autor
 
 ---
 
-**Desarrollado con ❤️ para estudiantes**
-
-¿Tienes alguna sugerencia o encontraste un error? ¡No dudes en contactarme! 
+**¡El éxito académico está en tus manos!** 🎓✨ 
